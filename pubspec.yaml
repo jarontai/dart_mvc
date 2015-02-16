@@ -3,6 +3,7 @@ version: 0.0.1
 author: Jaron Tai <jaroncn@gmail.com>
 description: A minimal and classic mvc implementation of dart.
 dependencies:
+  mime: any
   path: any
 dev_dependencies:
   unittest: any
