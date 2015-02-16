@@ -1,10 +1,8 @@
 name: dart_mvc
-description: >
-  A minimal and classic mvc implementation of dart.
 version: 0.0.1
 author: Jaron Tai <jaroncn@gmail.com>
-#homepage: https://www.example.com
-#dependencies:
-#  lib_name: any
+description: A minimal and classic mvc implementation of dart.
+dependencies:
+  path: any
 dev_dependencies:
   unittest: any
