@@ -8,4 +8,4 @@ library dart_mvc;
 
 // Export any libraries intended for clients of this package.
 
-export 'src/dart_mvc_base.dart';
+export 'src/server.dart';
