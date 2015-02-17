@@ -7,9 +7,7 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'handler.dart';
 
-
 class MvcServer {
-
   void run() {
     HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, 8080).then((server) {
       print("Serving at ${server.address}:${server.port}");
@@ -34,5 +32,4 @@ class MvcServer {
       }
     }
   }
-
 }
