@@ -1,6 +1,6 @@
 # dart_mvc
 
-A minimal and classic mvc implementation of dart.
+A minimal mvc implementation of Dart.
 
 ## Usage
 
