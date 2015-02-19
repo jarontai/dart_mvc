@@ -8,11 +8,11 @@ import 'package:mime/mime.dart' as mime;
 
 class RequestHandler {
   HttpRequest _req;
-  String contentsFolder = 'contents';
+  String contentsFolder = 'static';
 
   RequestHandler(this._req);
 
-  void handleContent(String filePath) {
+  void handleStatic(String filePath) {
     final CONTENTS_PATH = Platform.script.resolve(contentsFolder).toFilePath();
     var file = new File(CONTENTS_PATH + filePath);
     if (file.existsSync()) {

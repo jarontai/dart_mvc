@@ -26,7 +26,7 @@ class MvcServer {
       var handler = new RequestHandler(req);
       var ext = path.extension(reqPath);
       if (ext.length > 0) {
-        handler.handleContent(reqPath);
+        handler.handleStatic(reqPath);
       } else {
         handler.handleDynamic();
       }
