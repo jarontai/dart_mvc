@@ -4,6 +4,7 @@
 library dart_mvc.server;
 
 import 'dart:io';
+import 'dart:mirrors';
 import 'package:path/path.dart' as path;
 import 'handler.dart';
 
@@ -31,5 +32,15 @@ class MvcServer {
         handler.handleDynamic();
       }
     }
+  }
+
+  void route(String url, {String method: 'get',
+                          Symbol action: #index,
+                          Type controller: null}) {
+    if (controller != null) {
+      ClassMirror cm = reflectClass(controller);
+      cm.invoke(action, []);
+    }
+    // TODO - routing process
   }
 }

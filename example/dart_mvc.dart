@@ -4,8 +4,10 @@
 library dart_mvc.example;
 
 import 'package:dart_mvc/dart_mvc.dart';
+import 'controllers/users.dart';
 
 main() {
   var server = new MvcServer();
+  server.route('users', controller: UserController);
   server.run();
 }
