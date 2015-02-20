@@ -11,7 +11,17 @@ import 'response.dart';
 
 export 'dart:io' show HttpRequest;
 
+class _Route {
+  String method;
+  Symbol action;
+  Type controller;
+
+  _Route({this.method, this.action, this.controller});
+}
+
 class MvcServer {
+  Map<String, _Route> _routeMap = new Map();
+
   void run() {
     HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, 8080).then((server) {
       print("Serving at ${server.address}:${server.port}");
@@ -37,10 +47,15 @@ class MvcServer {
     }
   }
 
-  void route(String url, {String method: 'get',
+  void route(String rule, {String method: 'get',
                           Symbol action: #index,
                           Type controller: null}) {
-    // TODO - delete mock code below, create route table
+    if (rule.length > 0) {
+      _Route route = new _Route(method: method, action: action, controller: controller);
+      _routeMap[rule] = route;
+    }
+
+    // TODO - delete mock code below
     if (controller != null) {
       ClassMirror cm = reflectClass(controller);
       Response res = new Response(null);
