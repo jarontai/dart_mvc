@@ -6,10 +6,15 @@ A minimal mvc implementation of Dart.
 
 A simple usage example:
 
+    library dart_mvc.example;
+    
     import 'package:dart_mvc/dart_mvc.dart';
+    
+    part 'controllers/user.dart';
     
     main() {
       var server = new MvcServer();
+      server.route('users', controller: UserController);
       server.run();
     }
 
