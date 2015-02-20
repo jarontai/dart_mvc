@@ -9,3 +9,5 @@ library dart_mvc;
 // Export any libraries intended for clients of this package.
 
 export 'src/server.dart';
+export 'src/response.dart' show Response;
+export 'src/request.dart' show Request;

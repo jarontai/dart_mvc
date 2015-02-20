@@ -37,8 +37,4 @@ class RequestHandler {
       ..write('Not found!')
       ..close();
   }
-
-  void renderView(String view) {
-    // TODO - rendering process
-  }
 }

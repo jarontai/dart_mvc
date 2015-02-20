@@ -7,6 +7,9 @@ import 'dart:io';
 import 'dart:mirrors';
 import 'package:path/path.dart' as path;
 import 'handler.dart';
+import 'response.dart';
+
+export 'dart:io' show HttpRequest;
 
 class MvcServer {
   void run() {
@@ -37,10 +40,11 @@ class MvcServer {
   void route(String url, {String method: 'get',
                           Symbol action: #index,
                           Type controller: null}) {
+    // TODO - delete mock code below, create route table
     if (controller != null) {
       ClassMirror cm = reflectClass(controller);
-      cm.invoke(action, []);
+      Response res = new Response(null);
+      cm.invoke(action, [res]);
     }
-    // TODO - routing process
   }
 }

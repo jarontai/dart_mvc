@@ -4,7 +4,8 @@
 library dart_mvc.example;
 
 import 'package:dart_mvc/dart_mvc.dart';
-import 'controllers/users.dart';
+
+part 'controllers/user.dart';
 
 main() {
   var server = new MvcServer();
