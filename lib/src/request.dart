@@ -5,11 +5,17 @@ library dart_mvc.request;
 
 import 'dart:io';
 
+/**
+ * The request wrapper
+ */
 class Request {
   HttpRequest rawReq;
 
   Request(this.rawReq);
 
+  /**
+   * get request parameters
+   */
   void input(String name) {
     throw UnimplementedError;
   }

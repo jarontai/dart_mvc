@@ -4,23 +4,65 @@
 library dart_mvc.server;
 
 import 'dart:io';
+import 'dart:mirrors';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart' as mime;
+import 'response.dart';
 
 export 'dart:io' show HttpRequest;
 
+/**
+ * Route
+ */
 class _Route {
   String url;
   Symbol action;
   Type controller;
+  RegExp reg;
 
-  _Route({this.url, this.action, this.controller});
+  _Route({String url, Symbol action, Type controller}) {
+    this.url = url;
+    this.action = action;
+    this.controller = controller;
+    if (url.isNotEmpty) {
+      reg = new RegExp(url);
+    }
+  }
+
+  /**
+   * check whether the route is match the url path
+   */
+  bool match(String path) {
+    var result = false;
+    if (reg != null) {
+      result = reg.hasMatch(path);
+    }
+    return result;
+  }
+
+  /**
+   * invoke the controller
+   */
+  void invoke(HttpResponse res) {
+   if (controller != null) {
+     ClassMirror cm = reflectClass(controller);
+     Response response = new Response(res);
+     cm.invoke(action, [response]);
+   }
+  }
 }
 
+
+/**
+ *  MVC server
+ */
 class MvcServer {
   String contentsFolder = 'static';
   Map<String, List<_Route>> _routeMap = new Map();
 
+  /**
+   * kick the mvc server to run
+   */
   void run() {
     HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, 8080).then((server) {
       print("Serving at ${server.address}:${server.port}");
@@ -40,11 +82,14 @@ class MvcServer {
       if (ext.length > 0) {
         _handleStatic(req, reqPath);
       } else {
-        _handleDynamic(req);
+        _handleDynamic(req, reqPath);
       }
     }
   }
 
+  /**
+   * handle the static resources
+   */
   void _handleStatic(HttpRequest req, String filePath) {
     final CONTENTS_PATH = Platform.script.resolve(contentsFolder).toFilePath();
     var file = new File(CONTENTS_PATH + filePath);
@@ -57,15 +102,26 @@ class MvcServer {
     }
   }
 
-  void _handleDynamic(HttpRequest req) {
+  /**
+   * handle daynamic requests
+   */
+  void _handleDynamic(HttpRequest req, String path) {
     var method = req.method.toLowerCase();
+    var routeList = _routeMap[method];
+    var route = routeList.firstWhere((_Route route) {
+      return route.match(path);
+    }, orElse: () => null);
 
-    req.response
-      ..headers.contentType = new ContentType("text", "plain", charset: "utf-8")
-      ..write('Hello, Dynamic')
-      ..close();
+    if (route != null ) {
+      route.invoke(req.response);
+    } else {
+      _notFound(req);
+    }
   }
 
+  /**
+   * not found
+   */
   void _notFound(HttpRequest req) {
     req.response
       ..statusCode = HttpStatus.NOT_FOUND
@@ -73,6 +129,9 @@ class MvcServer {
       ..close();
   }
 
+  /**
+   * add route
+   */
   void route(String url, {String method: 'get',
                           Symbol action: #index,
                           Type controller: null}) {

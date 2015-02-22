@@ -4,16 +4,28 @@
 library dart_mvc.response;
 
 import 'dart:io';
+import 'dart:convert';
 
+/**
+ * The response wrapper
+ */
 class Response {
   HttpResponse rawRes;
 
   Response(this.rawRes);
 
+  /**
+   * response json data
+   */
   void json(List data) {
-    throw UnimplementedError;
+    rawRes.statusCode = HttpStatus.OK;
+    rawRes.write(JSON.encode(data));
+    rawRes.close();
   }
 
+  /**
+   * rendering html view file
+   */
   void view() {
     throw UnimplementedError;
   }
