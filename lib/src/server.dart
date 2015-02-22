@@ -4,23 +4,22 @@
 library dart_mvc.server;
 
 import 'dart:io';
-import 'dart:mirrors';
 import 'package:path/path.dart' as path;
-import 'handler.dart';
-import 'response.dart';
+import 'package:mime/mime.dart' as mime;
 
 export 'dart:io' show HttpRequest;
 
 class _Route {
-  String method;
+  String url;
   Symbol action;
   Type controller;
 
-  _Route({this.method, this.action, this.controller});
+  _Route({this.url, this.action, this.controller});
 }
 
 class MvcServer {
-  Map<String, _Route> _routeMap = new Map();
+  String contentsFolder = 'static';
+  Map<String, List<_Route>> _routeMap = new Map();
 
   void run() {
     HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, 8080).then((server) {
@@ -37,29 +36,54 @@ class MvcServer {
 
     // skip favicon
     if (reqPath != '/favicon.ico') {
-      var handler = new RequestHandler(req);
       var ext = path.extension(reqPath);
       if (ext.length > 0) {
-        handler.handleStatic(reqPath);
+        _handleStatic(req, reqPath);
       } else {
-        handler.handleDynamic();
+        _handleDynamic(req);
       }
     }
   }
 
-  void route(String rule, {String method: 'get',
+  void _handleStatic(HttpRequest req, String filePath) {
+    final CONTENTS_PATH = Platform.script.resolve(contentsFolder).toFilePath();
+    var file = new File(CONTENTS_PATH + filePath);
+    if (file.existsSync()) {
+      var mimeType = mime.lookupMimeType(file.path);
+      req.response.headers.set('Content-Type', mimeType);
+      file.openRead().pipe(req.response).catchError((e) {});
+    } else {
+      _notFound(req);
+    }
+  }
+
+  void _handleDynamic(HttpRequest req) {
+    var method = req.method.toLowerCase();
+
+    req.response
+      ..headers.contentType = new ContentType("text", "plain", charset: "utf-8")
+      ..write('Hello, Dynamic')
+      ..close();
+  }
+
+  void _notFound(HttpRequest req) {
+    req.response
+      ..statusCode = HttpStatus.NOT_FOUND
+      ..write('Not found!')
+      ..close();
+  }
+
+  void route(String url, {String method: 'get',
                           Symbol action: #index,
                           Type controller: null}) {
-    if (rule.length > 0) {
-      _Route route = new _Route(method: method, action: action, controller: controller);
-      _routeMap[rule] = route;
-    }
-
-    // TODO - delete mock code below
-    if (controller != null) {
-      ClassMirror cm = reflectClass(controller);
-      Response res = new Response(null);
-      cm.invoke(action, [res]);
+    if (url.isNotEmpty) {
+      var routeList = _routeMap[method];
+      if (routeList == null) {
+        routeList = new List<_Route>();
+        _routeMap[method] = routeList;
+      }
+      _Route route = new _Route(url: url, action: action, controller: controller);
+      routeList.add(route);
     }
   }
 }
