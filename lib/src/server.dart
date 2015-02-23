@@ -152,7 +152,7 @@ class MvcServer {
         _routeMap[method] = routeList;
       }
       _Route route = new _Route(url: url, action: action, controller: controller);
-      routeList.add(route);
+      routeList.insert(0, route);
     }
   }
 
@@ -167,7 +167,7 @@ class MvcServer {
         _routeMap[method] = routeList;
       }
       _Route route = new _Route(url: url, routeFn: routeFn);
-      routeList.add(route);
+      routeList.insert(0, route);
     }
   }
 }
