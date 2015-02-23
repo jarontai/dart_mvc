@@ -11,18 +11,18 @@ import 'package:mustache/mustache.dart';
  * The response wrapper
  */
 class Response {
-  HttpResponse rawRes;
+  HttpResponse _res;
   String _viewsFolder;
 
-  Response(this.rawRes);
+  Response(this._res);
 
   /**
    * response json data
    */
   void json(List data) {
-    rawRes.statusCode = HttpStatus.OK;
-    rawRes.write(JSON.encode(data));
-    rawRes.close();
+    _res.statusCode = HttpStatus.OK;
+    _res.write(JSON.encode(data));
+    _res.close();
   }
 
   /**
@@ -34,10 +34,10 @@ class Response {
       if (file.existsSync()) {
         var template = new Template(file.readAsStringSync());
         var output = template.renderString(data);
-        rawRes.statusCode = HttpStatus.OK;
-        rawRes.headers.contentType = new ContentType('text', 'html', charset: 'utf-8');
-        rawRes.write(output);
-        rawRes.close();
+        _res.statusCode = HttpStatus.OK;
+        _res.headers.contentType = new ContentType('text', 'html', charset: 'utf-8');
+        _res.write(output);
+        _res.close();
       }
     }
   }

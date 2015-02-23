@@ -9,9 +9,9 @@ import 'dart:io';
  * The request wrapper
  */
 class Request {
-  HttpRequest rawReq;
+  HttpRequest _req;
 
-  Request(this.rawReq);
+  Request(this._req);
 
   /**
    * get request parameters

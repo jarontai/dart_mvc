@@ -10,27 +10,25 @@ import 'package:mime/mime.dart' as mime;
 import 'request.dart';
 import 'response.dart';
 
-export 'dart:io' show HttpRequest;
-
 typedef void RouteFn(Request req, Response res);
 
 /**
  * Route
  */
 class _Route {
-  RouteFn routeFn;
-  String url;
-  Symbol action;
-  Type controller;
-  RegExp reg;
+  RouteFn _routeFn;
+  String _url;
+  Symbol _action;
+  Type _controller;
+  RegExp _reg;
 
   _Route({String url, Symbol action, Type controller, RouteFn routeFn}) {
-    this.url = url;
-    this.action = action;
-    this.controller = controller;
-    this.routeFn = routeFn;
+    this._url = url;
+    this._action = action;
+    this._controller = controller;
+    this._routeFn = routeFn;
     if (url.isNotEmpty) {
-      reg = new RegExp(url);
+      _reg = new RegExp(url);
     }
   }
 
@@ -39,8 +37,8 @@ class _Route {
    */
   bool match(String path) {
     var result = false;
-    if (reg != null) {
-      result = reg.hasMatch(path);
+    if (_reg != null) {
+      result = _reg.hasMatch(path);
     }
     return result;
   }
@@ -52,11 +50,11 @@ class _Route {
     var request = new Request(req);
     var response = new Response(req.response);
     response.viewsFolder = viewsFolder;
-    if (routeFn != null) {
-      routeFn(request, response);
-    } else if (controller != null) {
-      ClassMirror cm = reflectClass(controller);
-      cm.invoke(action, [request, response]);
+    if (_routeFn != null) {
+      _routeFn(request, response);
+    } else if (_controller != null) {
+      ClassMirror cm = reflectClass(_controller);
+      cm.invoke(_action, [request, response]);
     }
   }
 }
