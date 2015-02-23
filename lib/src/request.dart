@@ -16,7 +16,13 @@ class Request {
   /**
    * get request parameters
    */
-  void input(String name) {
-    throw UnimplementedError;
+  String input(String name) {
+    var result;
+    var queries = _req.uri.queryParameters;
+    if (queries.containsKey(name)) {
+      result = queries[name];
+    }
+    // TODO - parse data from POST requests
+    return result;
   }
 }
