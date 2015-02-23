@@ -4,6 +4,7 @@ author: Jaron Tai <jaroncn@gmail.com>
 description: A minimal mvc implementation of Dart.
 dependencies:
   mime: any
+  mustache: any
   path: any
 dev_dependencies:
   unittest: any

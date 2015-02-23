@@ -7,23 +7,28 @@ import 'dart:io';
 import 'dart:mirrors';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart' as mime;
+import 'request.dart';
 import 'response.dart';
 
 export 'dart:io' show HttpRequest;
+
+typedef void RouteFn(Request req, Response res);
 
 /**
  * Route
  */
 class _Route {
+  RouteFn routeFn;
   String url;
   Symbol action;
   Type controller;
   RegExp reg;
 
-  _Route({String url, Symbol action, Type controller}) {
+  _Route({String url, Symbol action, Type controller, RouteFn routeFn}) {
     this.url = url;
     this.action = action;
     this.controller = controller;
+    this.routeFn = routeFn;
     if (url.isNotEmpty) {
       reg = new RegExp(url);
     }
@@ -43,12 +48,16 @@ class _Route {
   /**
    * invoke the controller
    */
-  void invoke(HttpResponse res) {
-   if (controller != null) {
-     ClassMirror cm = reflectClass(controller);
-     Response response = new Response(res);
-     cm.invoke(action, [response]);
-   }
+  void invoke(HttpRequest req, String viewsFolder) {
+    var request = new Request(req);
+    var response = new Response(req.response);
+    response.viewsFolder = viewsFolder;
+    if (routeFn != null) {
+      routeFn(request, response);
+    } else if (controller != null) {
+      ClassMirror cm = reflectClass(controller);
+      cm.invoke(action, [request, response]);
+    }
   }
 }
 
@@ -58,6 +67,7 @@ class _Route {
  */
 class MvcServer {
   String contentsFolder = 'static';
+  String viewsFolder = 'views';
   Map<String, List<_Route>> _routeMap = new Map();
 
   /**
@@ -113,7 +123,7 @@ class MvcServer {
     }, orElse: () => null);
 
     if (route != null ) {
-      route.invoke(req.response);
+      route.invoke(req, viewsFolder);
     } else {
       _notFound(req);
     }
@@ -124,15 +134,15 @@ class MvcServer {
    */
   void _notFound(HttpRequest req) {
     req.response
-      ..statusCode = HttpStatus.NOT_FOUND
-      ..write('Not found!')
+      ..statusCode = HttpStatus.OK
+      ..write('No route found!')
       ..close();
   }
 
   /**
-   * add route
+   * add route with controller
    */
-  void route(String url, {String method: 'get',
+  void addRoute(String url, {String method: 'get',
                           Symbol action: #index,
                           Type controller: null}) {
     if (url.isNotEmpty) {
@@ -142,6 +152,21 @@ class MvcServer {
         _routeMap[method] = routeList;
       }
       _Route route = new _Route(url: url, action: action, controller: controller);
+      routeList.add(route);
+    }
+  }
+
+  /**
+   * add route with closure
+   */
+  void route(String url, RouteFn routeFn, {String method: 'get'}) {
+    if (url.isNotEmpty) {
+      var routeList = _routeMap[method];
+      if (routeList == null) {
+        routeList = new List<_Route>();
+        _routeMap[method] = routeList;
+      }
+      _Route route = new _Route(url: url, routeFn: routeFn);
       routeList.add(route);
     }
   }

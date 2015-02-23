@@ -14,7 +14,8 @@ A simple usage example:
     
     main() {
       var server = new MvcServer();
-      server.route('users', controller: UserController);
+      server.route('/', (req, res) => res.view('index', data: {'name': 'dart_mvc'}));
+      server.addRoute('users', controller: UserController);
       server.run();
     }
 
