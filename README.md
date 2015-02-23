@@ -10,7 +10,13 @@ A simple usage example:
     
     import 'package:dart_mvc/dart_mvc.dart';
     
-    part 'controllers/user.dart';
+    class UserController {
+      static void index(Request req, Response res) {
+        List<Map> mockUsers = [{'id': 1, 'username': 'jaron'},
+                                {'id': 2, 'username': 'dbzard'}];
+        res.json(mockUsers);
+      }
+    }
     
     main() {
       var server = new MvcServer();
