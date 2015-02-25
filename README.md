@@ -27,6 +27,12 @@ A simple usage example:
 
 Please examine the [example folder][example] for full example code.
 
+##TODOs
+
+* path variables
+* add body/params/query property to request
+* unit tests
+
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
