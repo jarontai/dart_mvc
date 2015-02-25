@@ -6,7 +6,7 @@ part of dart_mvc.example;
 class UserController {
 
   static void index(Request req, Response res) {
-    List<Map> mockUsers = [{'id': 1, 'username': 'jaron'},
+    List mockUsers = [{'id': 1, 'username': 'jaron'},
                             {'id': 2, 'username': 'dbzard'}];
     res.json(mockUsers);
   }

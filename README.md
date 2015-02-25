@@ -12,7 +12,7 @@ A simple usage example:
     
     class UserController {
       static void index(Request req, Response res) {
-        List<Map> mockUsers = [{'id': 1, 'username': 'jaron'},
+        List mockUsers = [{'id': 1, 'username': 'jaron'},
                                 {'id': 2, 'username': 'dbzard'}];
         res.json(mockUsers);
       }
@@ -21,7 +21,7 @@ A simple usage example:
     main() {
       var server = new MvcServer();
       server.route('/', (req, res) => res.view('index', data: {'name': 'dart_mvc'}));
-      server.addRoute('users', controller: UserController);
+      server.addRoute('users', controller: UserController, action: #index, method: 'get');
       server.run();
     }
 
