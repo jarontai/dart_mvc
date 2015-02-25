@@ -25,8 +25,11 @@ A simple usage example:
       server.run();
     }
 
+Please examine the [example folder][example] for full example code.
+
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/jarontai/dart_mvc/issues
+[example]: https://github.com/jarontai/dart_mvc/tree/master/example
