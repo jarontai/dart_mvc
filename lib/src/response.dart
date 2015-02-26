@@ -26,7 +26,7 @@ class Response {
   }
 
   /**
-   * rendering html view file
+   * render html file
    */
   void view(String name, {Map<String, Object> data}) {
     if (name.isNotEmpty) {

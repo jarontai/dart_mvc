@@ -13,7 +13,7 @@ A simple usage example:
     class UserController {
       static void index(Request req, Response res) {
         List mockUsers = [{'id': 1, 'username': 'jaron'},
-                                {'id': 2, 'username': 'dbzard'}];
+                          {'id': 2, 'username': 'dbzard'}];
         res.json(mockUsers);
       }
     }
@@ -29,8 +29,8 @@ Please examine the [example folder][example] for full example code.
 
 ##TODOs
 
-* path variables
-* add body/params/query property to request
+* support path variables
+* add body/params/query to Request
 * unit tests
 
 ## Features and bugs

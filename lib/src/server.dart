@@ -80,6 +80,9 @@ class MvcServer {
     });
   }
 
+  /**
+   * serve
+   */
   void _serve(HttpRequest req) {
     var reqPath = req.uri.toString();
     print("Request: ${reqPath}  ${new DateTime.now()}");
@@ -96,7 +99,7 @@ class MvcServer {
   }
 
   /**
-   * handle the static resources
+   * handle static resources
    */
   void _handleStatic(HttpRequest req, String filePath) {
     final CONTENTS_PATH = Platform.script.resolve(contentsFolder).toFilePath();

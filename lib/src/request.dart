@@ -22,7 +22,6 @@ class Request {
     if (queries.containsKey(name)) {
       result = queries[name];
     }
-    // TODO - parse data from POST requests
     return result;
   }
 }
