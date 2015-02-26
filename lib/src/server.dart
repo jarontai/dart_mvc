@@ -16,17 +16,17 @@ typedef void RouteFn(Request req, Response res);
  * Route
  */
 class _Route {
-  RouteFn _routeFn;
-  String _url;
-  Symbol _action;
-  Type _controller;
+  RouteFn routeFn;
+  String url;
+  Symbol action;
+  Type controller;
   RegExp _reg;
 
   _Route({String url, Symbol action, Type controller, RouteFn routeFn}) {
-    this._url = url;
-    this._action = action;
-    this._controller = controller;
-    this._routeFn = routeFn;
+    this.url = url;
+    this.action = action;
+    this.controller = controller;
+    this.routeFn = routeFn;
     if (url.isNotEmpty) {
       _reg = new RegExp(url);
     }
@@ -50,11 +50,11 @@ class _Route {
     var request = new Request(req);
     var response = new Response(req.response);
     response.viewsFolder = viewsFolder;
-    if (_routeFn != null) {
-      _routeFn(request, response);
-    } else if (_controller != null) {
-      ClassMirror cm = reflectClass(_controller);
-      cm.invoke(_action, [request, response]);
+    if (routeFn != null) {
+      routeFn(request, response);
+    } else if (controller != null) {
+      ClassMirror cm = reflectClass(controller);
+      cm.invoke(action, [request, response]);
     }
   }
 }
@@ -67,6 +67,7 @@ class MvcServer {
   String contentsFolder = 'static';
   String viewsFolder = 'views';
   Map<String, List<_Route>> _routeMap = new Map();
+  static const String slash = '/';
 
   /**
    * kick the mvc server to run
@@ -153,7 +154,7 @@ class MvcServer {
         _routeMap[method] = routeList;
       }
       _Route route = new _Route(url: url, action: action, controller: controller);
-      routeList.insert(0, route);
+      _addRoute(routeList, route);
     }
   }
 
@@ -168,7 +169,15 @@ class MvcServer {
         _routeMap[method] = routeList;
       }
       _Route route = new _Route(url: url, routeFn: routeFn);
-      routeList.insert(0, route);
+      _addRoute(routeList, route);
+    }
+  }
+
+  void _addRoute(List<_Route> list, _Route route) {
+    if (route.url == slash) {
+      list.add(route);
+    } else {
+      list.insert(0, route);
     }
   }
 }
