@@ -67,13 +67,14 @@ class MvcServer {
   String contentsFolder = 'static';
   String viewsFolder = 'views';
   Map<String, List<_Route>> _routeMap = new Map();
-  static const String slash = '/';
+  static const String _slash = '/';
+
 
   /**
    * kick the mvc server to run
    */
-  void run() {
-    HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, 8080).then((server) {
+  void run({int port: 8080}) {
+    HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, port).then((server) {
       print("Serving at ${server.address}:${server.port}");
       server.listen((HttpRequest request) {
         _serve(request);
@@ -174,7 +175,7 @@ class MvcServer {
   }
 
   void _addRoute(List<_Route> list, _Route route) {
-    if (route.url == slash) {
+    if (route.url == _slash) {
       list.add(route);
     } else {
       list.insert(0, route);
