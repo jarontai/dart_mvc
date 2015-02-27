@@ -106,13 +106,15 @@ class MvcServer {
   void _handleStatic(HttpRequest req, String filePath) {
     final CONTENTS_PATH = Platform.script.resolve(contentsFolder).toFilePath();
     var file = new File(CONTENTS_PATH + filePath);
-    if (file.existsSync()) {
-      var mimeType = mime.lookupMimeType(file.path);
-      req.response.headers.set('Content-Type', mimeType);
-      file.openRead().pipe(req.response).catchError((e) {});
-    } else {
-      _notFound(req);
-    }
+    file.exists().then((bool exists) {
+      if (exists) {
+        var mimeType = mime.lookupMimeType(file.path);
+        req.response.headers.set('Content-Type', mimeType);
+        file.openRead().pipe(req.response).catchError((e) {});
+      } else {
+        _notFound(req);
+      }
+    });
   }
 
   /**
@@ -137,8 +139,8 @@ class MvcServer {
    */
   void _notFound(HttpRequest req) {
     req.response
-      ..statusCode = HttpStatus.OK
-      ..write('No route found!')
+      ..statusCode = HttpStatus.NOT_FOUND
+      ..write('Not found!')
       ..close();
   }
 
