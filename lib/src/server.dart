@@ -74,7 +74,7 @@ class MvcServer {
    * kick the mvc server to run
    */
   void run({int port: 8080}) {
-    HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, port).then((server) {
+    HttpServer.bind(InternetAddress.ANY_IP_V4, port).then((server) {
       print("Serving at ${server.address}:${server.port}");
       server.listen((HttpRequest request) {
         _serve(request);
