@@ -29,7 +29,6 @@ Please examine the [example folder][example] for full example code.
 
 ##TODOs
 
-* support path variables
 * add body/params/query to Request
 * unit tests
 

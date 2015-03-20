@@ -10,6 +10,8 @@ part 'controllers/user.dart';
 main() {
   var server = new MvcServer();
   server.route('/', (req, res) => res.view('index', data: {'name': 'dart_mvc'}));
-  server.addRoute('users', controller: UserController, action: #index, method: 'get');
+  server.addRoute('/users', controller: UserController, action: #index, method: 'get');
+  server.addRoute('/users/{id}', controller: UserController, action: #show, method: 'get');
+
   server.run(port: 8080);
 }

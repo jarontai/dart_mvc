@@ -11,6 +11,8 @@ import 'dart:io';
 class Request {
   HttpRequest _req;
 
+  Map params = {};
+
   Request(this._req);
 
   /**
