@@ -11,18 +11,29 @@ A simple usage example:
     import 'package:dart_mvc/dart_mvc.dart';
     
     class UserController {
+      static List mockUsers = [{'id': 1, 'username': 'jaron'},
+                              {'id': 2, 'username': 'dbzard'}];
+    
       static void index(Request req, Response res) {
-        List mockUsers = [{'id': 1, 'username': 'jaron'},
-                          {'id': 2, 'username': 'dbzard'}];
         res.json(mockUsers);
+      }
+    
+      static void show(Request req, Response res) {
+        var id = int.parse(req.params['id']);
+        var result = mockUsers.firstWhere((user) {
+          return user['id'] == id;
+        });
+        res.json([result]);
       }
     }
     
     main() {
       var server = new MvcServer();
       server.route('/', (req, res) => res.view('index', data: {'name': 'dart_mvc'}));
-      server.addRoute('users', controller: UserController, action: #index, method: 'get');
-      server.run();
+      server.addRoute('/users', controller: UserController, action: #index);
+      server.addRoute('/users/{id}', method: 'get', controller: UserController, action: #show);
+    
+      server.run(port: 8080);
     }
 
 Please examine the [example folder][example] for full example code.
