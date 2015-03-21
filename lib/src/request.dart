@@ -26,4 +26,6 @@ class Request {
     }
     return result;
   }
+
+  HttpRequest get request => _req;
 }

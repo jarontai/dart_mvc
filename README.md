@@ -40,7 +40,7 @@ Please examine the [example folder][example] for full example code.
 
 ##TODOs
 
-* add body/params/query to Request
+* optional and multiple path variables
 * unit tests
 
 ## Features and bugs
