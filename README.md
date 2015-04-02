@@ -40,8 +40,7 @@ Please examine the [example folder][example] for full example code.
 
 ##TODOs
 
-* optional and multiple path variables
-* unit tests
+* tests
 
 ## Features and bugs
 

@@ -17,7 +17,7 @@ class Response {
   Response(this._res);
 
   /**
-   * response json data
+   * Response json data
    */
   void json(List data) {
     _res.statusCode = HttpStatus.OK;
@@ -26,7 +26,7 @@ class Response {
   }
 
   /**
-   * render html file
+   * Render html file
    */
   void view(String name, {Map<String, Object> data}) {
     if (name.isNotEmpty) {

@@ -19,7 +19,7 @@ class MvcServer {
 
 
   /**
-   * kick the mvc server to run
+   * Kick the mvc server to run
    */
   void run({int port: 8080}) {
     HttpServer.bind(InternetAddress.ANY_IP_V4, port).then((server) {
@@ -31,7 +31,7 @@ class MvcServer {
   }
 
   /**
-   * serve
+   * Serve
    */
   void _serve(HttpRequest req) {
     var reqPath = req.uri.toString();
@@ -49,7 +49,7 @@ class MvcServer {
   }
 
   /**
-   * handle static resources
+   * Handle static resources
    */
   void _handleStatic(HttpRequest req, String filePath) {
     final CONTENTS_PATH = Platform.script.resolve(contentsFolder).toFilePath();
@@ -66,7 +66,7 @@ class MvcServer {
   }
 
   /**
-   * handle daynamic requests
+   * Handle daynamic requests
    */
   void _handleDynamic(HttpRequest req, String path) {
     var method = req.method.toLowerCase();
@@ -93,7 +93,7 @@ class MvcServer {
   }
 
   /**
-   * add route with controller
+   * Add route with controller
    */
   void addRoute(String path, {String method: 'get',
                           Symbol action: #index,
@@ -110,7 +110,7 @@ class MvcServer {
   }
 
   /**
-   * add route with closure
+   * Add route with closure
    */
   void route(String url, RouteFn routeFn, {String method: 'get'}) {
     if (url.isNotEmpty) {

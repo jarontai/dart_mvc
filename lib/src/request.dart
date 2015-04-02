@@ -16,7 +16,7 @@ class Request {
   Request(this._req);
 
   /**
-   * get request parameters
+   * Get request's query parameters
    */
   String input(String name) {
     var result;

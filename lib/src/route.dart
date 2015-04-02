@@ -37,29 +37,30 @@ class Route {
   }
 
   /**
-   * check whether the route is match the url path
+   * Check whether the route is match the url path then extra path variable
    */
   bool match(String path) {
     var result = false;
     if (_reg != null) {
-      Iterable<Match> matches = _reg.allMatches(path);
-      if (_keys.isNotEmpty) {
-        for (var i = 0; i < matches.length; i++) {
-          var key = _keys[i];
-          var m = matches.elementAt(i);
-          var val = m[i+1];
-          if (key != null) {
-            _params[key['name']] = val;
+      Match match = _reg.firstMatch(path);
+      if (match != null) {
+        result = true;
+        if (_keys.isNotEmpty) {
+          for (var i = 0; i < _keys.length; i++) {
+            var key = _keys[i];
+            var val = match.group(i+1);
+            if (key != null) {
+              _params[key['name']] = val;
+            }
           }
         }
       }
-      result = matches.length > 0;
     }
     return result;
   }
 
   /**
-   * invoke the controller
+   * Invoke the controller
    */
   void invoke(HttpRequest req, String viewsFolder) {
     var request = new Request(req);
@@ -87,7 +88,7 @@ class Route {
                   var result = '(.+)';
                   return result;
                });
-    var result = new RegExp(r'^' + normal + r'$');
+    var result = new RegExp(r'^' + normal.replaceAll(r'/', r'\/') + r'$');
     return result;
   }
 }
