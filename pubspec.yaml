@@ -1,5 +1,5 @@
 name: dart_mvc
-version: 0.0.1
+version: 0.1.0
 author: Jaron Tai <jaroncn@gmail.com>
 description: A minimal mvc implementation of Dart.
 dependencies:
