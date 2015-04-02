@@ -98,6 +98,7 @@ class MvcServer {
   void addRoute(String path, {String method: 'get',
                           Symbol action: #index,
                           Type controller: null}) {
+    method = method.toLowerCase();
     if (path.isNotEmpty) {
       var routeList = _routeMap[method];
       if (routeList == null) {
@@ -114,6 +115,7 @@ class MvcServer {
    */
   void route(String url, RouteFn routeFn, {String method: 'get'}) {
     if (url.isNotEmpty) {
+      method = method.toLowerCase();
       var routeList = _routeMap[method];
       if (routeList == null) {
         routeList = new List<Route>();
